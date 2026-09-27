@@ -1,0 +1,10 @@
+out/
+tmp/
+.idea/
+*.iml
+local.env
+.env
+.env.*
+!.env.example
+*.log
+evidencias/local-*.txt

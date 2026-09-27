@@ -1,0 +1,51 @@
+@startuml
+title DER complementario B - importación y auditoría
+skinparam monochrome true
+hide circle
+entity usuario {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR
+}
+entity importacion_lote {
+ * id : BIGINT <<PK>>
+ --
+ usuario_id : BIGINT <<FK>>
+ origen, archivo : VARCHAR
+ incorporadas, duplicadas, fallidas : INT
+}
+entity importacion_error {
+ * id : BIGINT <<PK>>
+ --
+ lote_id : BIGINT <<FK>>
+ numero_fila : INT
+ detalle : VARCHAR
+}
+entity postulacion {
+ * id : BIGINT <<PK>>
+ --
+ importacion_lote_id : BIGINT <<FK,NULL>>
+ origen, id_origen : VARCHAR <<UQ>>
+ estado : ENUM
+}
+entity auditoria_evento {
+ * id : BIGINT <<PK>>
+ --
+ usuario_id : BIGINT <<FK>>
+ entidad, evento : VARCHAR
+ entidad_id : BIGINT
+ fecha : DATETIME
+}
+usuario ||--o{ importacion_lote
+importacion_lote ||--o{ importacion_error
+importacion_lote |o--o{ postulacion
+usuario ||--o{ auditoria_evento
+note right of importacion_error
+ Las filas incompletas o inválidas se rechazan
+ y quedan registradas aquí; no crean postulación.
+end note
+note right of auditoria_evento
+ entidad_id es referencia histórica polimórfica;
+ no es FK. La aplicación registra tipo e id.
+end note
+@enduml

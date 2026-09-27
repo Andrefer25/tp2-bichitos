@@ -1,0 +1,78 @@
+@startuml
+title DER de soporte resumido - ver 08a y 08b para detalle actual
+skinparam monochrome true
+hide circle
+entity evaluacion {
+ * id : BIGINT <<PK>>
+ --
+ postulacion_id : BIGINT <<FK,UQ>>
+}
+entity criterio {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR <<UQ>>
+ descripcion : VARCHAR
+}
+entity evaluacion_criterio {
+ * evaluacion_id : BIGINT <<PK,FK>>
+ * criterio_id : BIGINT <<PK,FK>>
+ --
+ valoracion : ENUM
+ observaciones : VARCHAR
+}
+entity seguimiento {
+ * id : BIGINT <<PK>>
+ --
+ adopcion_id : BIGINT <<FK>>
+}
+entity accion_alerta {
+ * id : BIGINT <<PK>>
+ --
+ seguimiento_id : BIGINT <<FK>>
+ responsable_id : BIGINT <<FK>>
+ motivo, accion : VARCHAR
+ estado : ENUM
+ fecha_apertura : DATETIME
+ fecha_limite : DATE
+}
+entity usuario {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR
+}
+entity importacion_lote {
+ * id : BIGINT <<PK>>
+ --
+ usuario_id : BIGINT <<FK>>
+ origen, archivo : VARCHAR
+ inicio, fin : DATETIME
+ incorporadas, duplicadas, fallidas : INT
+}
+entity importacion_error {
+ * id : BIGINT <<PK>>
+ --
+ lote_id : BIGINT <<FK>>
+ numero_fila : INT
+ id_origen : VARCHAR NULL
+ detalle : VARCHAR
+}
+entity auditoria_evento {
+ * id : BIGINT <<PK>>
+ --
+ usuario_id : BIGINT <<FK>>
+ entidad, evento : VARCHAR
+ entidad_id : BIGINT
+ fecha : DATETIME
+}
+evaluacion ||--o{ evaluacion_criterio
+criterio ||--o{ evaluacion_criterio
+seguimiento ||--o{ accion_alerta
+usuario ||--o{ accion_alerta
+usuario ||--o{ importacion_lote
+importacion_lote ||--o{ importacion_error
+usuario ||--o{ auditoria_evento
+note right of auditoria_evento
+ entidad_id es referencia histórica polimórfica;
+ no es FK. La aplicación registra tipo e id.
+end note
+@enduml

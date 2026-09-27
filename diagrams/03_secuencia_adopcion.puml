@@ -1,0 +1,31 @@
+@startuml
+title Decisión humana y registro de adopción
+skinparam monochrome true
+actor "Responsable de adopciones" as R
+participant "App" as W
+participant "WorkflowService" as S
+database "MySQL" as DB
+R -> W: decidir(postulación, resultado, fundamento)
+W -> S: decide(...)
+S -> DB: bloquear postulación y consultar evaluación
+DB --> S: estado, animal, entrevista/vivienda/encuentro
+alt aprobación válida y fundamentada
+ S -> DB: INSERT decision + UPDATE postulacion + auditoría
+ DB --> S: id decisión
+ S --> W: id decisión
+ W --> R: decisión registrada
+ R -> W: entregar(decisión, fecha, compromiso firmado)
+ W -> S: adopt(...)
+ S -> DB: bloquear animal, verificar aprobación
+ S -> DB: INSERT adopcion
+ S -> DB: INSERT 3 seguimientos (48-72h, 15d, 30d)
+ S -> DB: UPDATE animal y auditoría; COMMIT
+ DB --> S: id adopción
+ S --> W: id adopción
+ W --> R: agenda creada
+else incumplimiento
+ S -> DB: ROLLBACK
+ S --> W: motivo de rechazo
+ W --> R: corregir datos
+end
+@enduml

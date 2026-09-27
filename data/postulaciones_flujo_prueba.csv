@@ -1,0 +1,9 @@
+id_origen;animal_id;tipo_documento;numero_documento;nombre;fecha_nacimiento;domicilio;localidad;telefono;correo;alquila;consentimiento_propietario;tiempo_y_recursos
+FLUJO01;4;DNI;31000001;Clara Soto;1991-03-04;Calle Norte 12;Olivos;1100000012;clara@example.test;no;no;si
+FLUJO02;4;DNI;31000002;Diego Paz;1992-07-11;Calle Sur 88;Florida;1100000088;diego@example.test;si;si;si
+FLUJO03;3;DNI;31000003;Eva Torres;1994-06-18;Calle Central 4;Munro;1100000006;eva@example.test;no;no;si
+FLUJO05;6;DNI;31000001;Clara Soto;1991-03-04;Calle Norte 12;Olivos;1100000012;clara@example.test;no;no;si
+FLUJO06;4;;31000006;Caso Incompleto;;Calle Central 6;Munro;;incompleto@example.test;no;no;si
+F001;1;DNI;30000001;Ana Pérez;1990-05-12;Calle Uno 123;Vicente López;1100000001;ana@example.test;no;no;si
+BASE004;1;DNI;31000001;Clara Soto;1991-03-04;Calle Norte 12;Olivos;1100000012;clara@example.test;no;no;si
+FLUJO04;999;DNI;31000004;Caso Error;1980-01-01;Calle 1;Olivos;;error@example.test;no;no;si

@@ -1,0 +1,5 @@
+id_origen;animal_id;tipo_documento;numero_documento;nombre;fecha_nacimiento;domicilio;localidad;telefono;correo;alquila;consentimiento_propietario;tiempo_y_recursos
+F001;1;DNI;30000001;Ana Pérez;1990-05-12;Calle Uno 123;Vicente López;1100000001;ana@example.test;no;no;si
+F002;1;DNI;30000002;Luis Gómez;2009-04-20;Calle Dos 45;Olivos;1100000002;luis@example.test;no;no;si
+F003;1;DNI;30000003;María Ruiz;1987-02-02;Calle Tres 90;Florida;1100000003;maria@example.test;si;no;si
+F004;1;DNI;30000004;Tomás Díaz;1982-08-17;Calle Cuatro 8;Munro;1100000004;tomas@example.test;si;si;si

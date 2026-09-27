@@ -1,0 +1,3 @@
+id_origen;animal_id;tipo_documento;numero_documento;nombre;fecha_nacimiento;domicilio;localidad;telefono;correo;alquila;consentimiento_propietario;tiempo_y_recursos
+ERR001;1;DNI;39999999;Caso Inválido;fecha-mal;Calle Error 1;Olivos;1100000098;error@example.test;no;no;si
+F001;1;DNI;30000001;Ana Pérez;1990-05-12;Calle Uno 123;Vicente López;1100000001;ana@example.test;no;no;si

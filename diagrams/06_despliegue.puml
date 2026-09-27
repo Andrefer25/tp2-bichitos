@@ -1,0 +1,28 @@
+@startuml
+title Despliegue local y topología prevista
+skinparam monochrome true
+node "Equipo de desarrollo - IMPLEMENTADO" {
+ artifact "Navegador" as B
+ node "JVM Java 16" {
+  artifact "App HTTP 127.0.0.1:8080 (puerto configurable)" as A
+  artifact "Connector/J 8.0.33" as J
+ }
+ database "MySQL 8 localhost:3306" as M
+ B --> A : HTTP loopback
+ A --> J
+ J --> M : TCP/IP + protocolo MySQL
+ note right of A
+ Al iniciar: esquema y demo con reset=true;
+ reset=false conserva la base existente.
+ end note
+}
+cloud "Despliegue web futuro - NO IMPLEMENTADO" {
+ node "Dispositivo de voluntario" as V
+ node "Servidor Java con TLS" as SJ
+ database "MySQL de producción" as MP
+ cloud "Google Sheets API" as GS
+ V --> SJ : HTTPS/TCP/IP
+ SJ --> MP : JDBC/TCP/IP
+ SJ --> GS : HTTPS/TCP/IP
+}
+@enduml

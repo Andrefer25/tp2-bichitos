@@ -1,0 +1,25 @@
+@startuml
+title Registro de seguimiento y alerta
+skinparam monochrome true
+actor "Responsable de seguimiento" as R
+participant "App" as W
+participant "WorkflowService" as S
+database "MySQL" as DB
+R -> W: registrar contacto y resultado
+W -> S: followUp(...)
+S -> DB: bloquear seguimiento pendiente
+alt satisfactorio
+ S -> DB: guardar fecha, canal, resultado
+else sin respuesta o acompañamiento
+ S -> DB: guardar contacto y programar EXTRA
+else alerta o posible devolución
+ S -> DB: guardar contacto, INSERT accion_alerta
+ S -> DB: programar EXTRA
+ opt posible devolución
+  S -> DB: marcar adopción DEVOLUCION_PENDIENTE
+ end
+end
+S -> DB: auditoría y COMMIT
+S --> W: resultado
+W --> R: historial actualizado
+@enduml

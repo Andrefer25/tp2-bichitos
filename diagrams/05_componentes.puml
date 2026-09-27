@@ -1,0 +1,41 @@
+@startuml
+title Componentes de prototipo y solución prevista
+skinparam monochrome true
+package "Prototipo implementado" {
+ [Navegador local] as Browser
+ [Servidor HTTP Java App] as Web
+ [CsvImporter] as Csv
+ [WorkflowService] as Flow
+ [Eligibility] as Elig
+ [Database JDBC] as Jdbc
+ [DemoDatabase] as Demo
+ [Pages + HTML/CSS/JS] as Pages
+ database "MySQL 8" as My
+ file "CSV exportado" as File
+ Browser --> Web : HTTP localhost
+ Web --> Pages
+ Web --> Demo : al arrancar
+ Web --> Csv
+ Web --> Flow
+ Flow --> Elig
+ Csv --> Jdbc
+ Demo --> Jdbc : esquema / demo opcional
+ Flow --> Jdbc
+ Jdbc --> My : JDBC/MySQL
+ File --> Csv
+ note right of Csv
+ CSV: datos completos por fila.
+ Errores de lote y duplicados.
+ end note
+}
+package "Solución final prevista, no implementada" {
+ [Google Forms] as Forms
+ [Google Sheets] as Sheets
+ [Sincronizador programado] as Sync
+ [Autenticación y roles] as Auth
+ Forms --> Sheets
+ Sheets --> Sync : API HTTPS
+ Sync ..> Jdbc
+ Auth ..> Web
+}
+@enduml

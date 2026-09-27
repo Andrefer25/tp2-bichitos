@@ -1,0 +1,111 @@
+@startuml
+title DER lógico principal - PK y FK
+skinparam monochrome true
+hide circle
+entity usuario {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR
+ correo : VARCHAR <<UQ>>
+ rol : ENUM
+}
+entity hogar_transito {
+ * id : BIGINT <<PK>>
+ --
+ nombre_referente : VARCHAR
+ localidad : VARCHAR
+}
+entity animal {
+ * id : BIGINT <<PK>>
+ --
+ hogar_transito_id : BIGINT <<FK>>
+ nombre : VARCHAR
+ estado : ENUM
+ necesidades_cuidado : TEXT
+}
+entity postulante {
+ * id : BIGINT <<PK>>
+ --
+ tipo_documento : VARCHAR NULL
+ numero_documento : VARCHAR NULL
+ nombre : VARCHAR NULL
+ fecha_nacimiento : DATE NULL
+ domicilio : VARCHAR NULL
+ localidad : VARCHAR NULL
+ correo : VARCHAR NULL
+}
+entity postulacion {
+ * id : BIGINT <<PK>>
+ --
+ animal_id : BIGINT <<FK>>
+ postulante_id : BIGINT <<FK>>
+ importacion_lote_id : BIGINT <<FK,NULL>>
+ origen, id_origen : VARCHAR <<UQ>>
+ estado : ENUM
+ alquila, consentimiento_propietario, tiempo_y_recursos : BOOLEAN NULL
+ motivo_estado : VARCHAR
+}
+entity verificacion {
+ * id : BIGINT <<PK>>
+ --
+ postulacion_id : BIGINT <<FK,UQ>>
+ usuario_id : BIGINT <<FK>>
+ identidad, domicilio, consentimiento : BOOLEAN NULL
+ fecha : DATETIME
+}
+entity evaluacion {
+ * id : BIGINT <<PK>>
+ --
+ postulacion_id : BIGINT <<FK,UQ>>
+ usuario_id : BIGINT <<FK>>
+ entrevista, vivienda, encuentro : ENUM
+ observaciones : TEXT
+}
+entity decision {
+ * id : BIGINT <<PK>>
+ --
+ postulacion_id : BIGINT <<FK>>
+ usuario_id : BIGINT <<FK>>
+ resultado : ENUM
+ fundamento : TEXT
+}
+entity adopcion {
+ * id : BIGINT <<PK>>
+ --
+ decision_id : BIGINT <<FK,UQ>>
+ fecha_entrega : DATE
+ compromiso_firmado : BOOLEAN
+ estado : ENUM
+}
+entity seguimiento {
+ * id : BIGINT <<PK>>
+ --
+ adopcion_id : BIGINT <<FK>>
+ responsable_id : BIGINT <<FK>>
+ tipo : ENUM
+ fecha_programada, fecha_limite : DATE
+ fecha_contacto : DATETIME
+ resultado : ENUM
+}
+hogar_transito ||--o{ animal
+animal ||--o{ postulacion
+postulante ||--o{ postulacion
+postulacion ||--o| verificacion
+postulacion ||--o| evaluacion
+postulacion ||--o{ decision
+decision ||--o| adopcion
+adopcion ||--o{ seguimiento
+usuario ||--o{ verificacion
+usuario ||--o{ evaluacion
+usuario ||--o{ decision
+usuario ||--o{ seguimiento
+note right of postulante
+ El esquema conserva NULL por compatibilidad.
+ La importación actual rechaza filas con datos
+ obligatorios faltantes antes de crear postulaciones.
+end note
+note bottom of postulacion
+ Una fila por animal solicitado; una persona
+ puede tener varias postulaciones independientes.
+end note
+@enduml

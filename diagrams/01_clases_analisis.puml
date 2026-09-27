@@ -1,0 +1,51 @@
+@startuml
+title Clases de análisis del flujo central
+skinparam monochrome true
+top to bottom direction
+class "Interfaz de postulaciones" as IP <<boundary>>
+class "Interfaz de evaluación" as IE <<boundary>>
+class "Interfaz de seguimiento" as IS <<boundary>>
+class "Control de importación" as CI <<control>>
+class "Control de elegibilidad" as CE <<control>>
+class "Control de verificación" as CV <<control>>
+class "Control de adopción" as CA <<control>>
+class "Control de seguimiento" as CS <<control>>
+class Animal <<entity>>
+class Postulante <<entity>>
+class Postulación <<entity>>
+class Verificación <<entity>>
+class "Error de importación" as ErrorImportacion <<entity>>
+class Evaluación <<entity>>
+class Decisión <<entity>>
+class Adopción <<entity>>
+class Seguimiento <<entity>>
+class Alerta <<entity>>
+IP --> CI
+IP --> CE
+IP --> CV
+IE --> CA
+IS --> CS
+CI --> Postulación
+CI --> ErrorImportacion : rechaza fila incompleta
+CE --> Postulación
+CV --> Verificación
+CA --> Evaluación
+CA --> Decisión
+CA --> Adopción
+CS --> Seguimiento
+CS --> Alerta
+Animal "1" -- "0..*" Postulación
+Postulante "1" -- "0..*" Postulación
+Postulación "1" -- "0..1" Verificación
+Postulación "1" -- "0..1" Evaluación
+Postulación "1" -- "0..*" Decisión
+Decisión "1" -- "0..1" Adopción
+Adopción "1" -- "3..*" Seguimiento
+Seguimiento "1" -- "0..*" Alerta
+note right of Postulación
+ Una postulación por animal solicitado.
+ La importación exige datos declarados completos;
+ la verificación documental es posterior.
+ No hay alta manual de animales.
+end note
+@enduml

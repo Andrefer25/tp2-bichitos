@@ -1,0 +1,66 @@
+@startuml
+title Clases Java del prototipo
+skinparam monochrome true
+left to right direction
+package web {
+ class App {
+ +main(args)
+ -handle(exchange)
+ -perform(exchange): Action
+ }
+ class Pages {
+ +render(params: Map<String,String>): String
+ -evaluations(out,post,animal)
+ }
+}
+package application {
+ class CsvImporter {
+ +importFile(path: Path,userId: long): Summary
+ +importReader(source: Reader,filename: String,userId: long): Summary
+ +parse(line): List<String>
+ }
+ class WorkflowService {
+ +verify(postId,identity,address,consent,userId): Result
+ +evaluate(postId,interview,home,meeting,notes,criteria,activities,userId): long
+ +decide(postId,result,reason,userId): long
+ +adopt(decisionId,date,signed,userId): long
+ +followUp(id,channel,result,notes,owner,userId)
+ +closeAlert(id,action,userId)
+ }
+}
+package domain {
+ class Eligibility {
+ +assess(birth,identity,address,rents,consent,care): Result
+ }
+}
+package repository {
+ class Database {
+ +open(): Connection
+ }
+ class DemoDatabase {
+ +initialize(): void
+ }
+ class MigrateFlow {
+ +apply(db: Connection): void
+ }
+ class CaseQueries {
+ +one(sql,ids): Map<String,Object>
+ +rows(sql,ids): List<Map<String,Object>>
+ }
+}
+App --> CsvImporter
+App --> DemoDatabase : inicio
+App --> WorkflowService
+App --> Pages
+Pages --> CaseQueries
+CsvImporter --> Database
+WorkflowService --> Database
+WorkflowService --> Eligibility
+CaseQueries --> Database
+DemoDatabase --> Database
+DemoDatabase --> MigrateFlow : si hace falta
+note bottom of CsvImporter
+ Rechaza filas incompletas; registra error de lote.
+ No existe ruta para completar datos ni alta de animales.
+end note
+@enduml

@@ -1,0 +1,65 @@
+@startuml
+title DER complementario A - criterios y alertas
+skinparam monochrome true
+hide circle
+entity evaluacion {
+ * id : BIGINT <<PK>>
+ --
+ postulacion_id : BIGINT <<FK,UQ>>
+}
+entity evaluacion_actividad {
+ * evaluacion_id : BIGINT <<PK,FK>>
+ * tipo : ENUM <<PK>>
+ --
+ fecha : DATE
+ responsable_id : BIGINT <<FK>>
+}
+entity animal {
+ * id : BIGINT <<PK>>
+}
+entity criterio {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR <<UQ>>
+ descripcion : VARCHAR
+}
+entity animal_criterio {
+ * animal_id : BIGINT <<PK,FK>>
+ * criterio_id : BIGINT <<PK,FK>>
+}
+entity evaluacion_criterio {
+ * evaluacion_id : BIGINT <<PK,FK>>
+ * criterio_id : BIGINT <<PK,FK>>
+ --
+ valoracion : ENUM
+ observaciones : VARCHAR
+}
+entity seguimiento {
+ * id : BIGINT <<PK>>
+ --
+ adopcion_id : BIGINT <<FK>>
+}
+entity accion_alerta {
+ * id : BIGINT <<PK>>
+ --
+ seguimiento_id : BIGINT <<FK>>
+ responsable_id : BIGINT <<FK>>
+ motivo, accion : VARCHAR
+ estado : ENUM
+ fecha_apertura : DATETIME
+ fecha_limite : DATE
+}
+entity usuario {
+ * id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR
+}
+evaluacion ||--o{ evaluacion_criterio
+evaluacion ||--o{ evaluacion_actividad
+usuario ||--o{ evaluacion_actividad
+animal ||--o{ animal_criterio
+criterio ||--o{ animal_criterio
+criterio ||--o{ evaluacion_criterio
+seguimiento ||--o{ accion_alerta
+usuario ||--o{ accion_alerta
+@enduml
